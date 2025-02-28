@@ -21,6 +21,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
         }
 
         h1 {
@@ -34,6 +35,18 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
+        }
+
+        /* Create a special layout for centered sections */
+        .center-sections {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .center-sections .section-card {
+            width: 250px;
         }
 
         .section-card {
@@ -128,6 +141,32 @@
             color: #4299e1;
         }
 
+        .linkedin-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #0077b5;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .linkedin-button:hover {
+            background-color: #005fa3;
+        }
+
+        .linkedin-button i {
+            color: white;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
@@ -136,6 +175,16 @@
             .sections-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .center-sections {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .linkedin-button {
+                position: relative;
+                margin: 0 auto 1rem;
+            }
         }
     </style>
 </head>
@@ -143,8 +192,16 @@
     <div class="container">
         <h1>Interactive Career Journey</h1>
         
-        <div class="sections-grid" id="sections">
-            <!-- Sections will be populated by JavaScript -->
+        <a href="https://www.linkedin.com/in/felix-constantin-burcea-9bb53837/" target="_blank" class="linkedin-button" title="Connect on LinkedIn">
+            <i data-feather="linkedin"></i>
+        </a>
+        
+        <div class="sections-grid" id="main-sections">
+            <!-- Main sections will be populated by JavaScript -->
+        </div>
+        
+        <div class="center-sections" id="centered-sections">
+            <!-- Centered sections will be populated by JavaScript -->
         </div>
 
         <div class="details-container" id="details">
@@ -157,7 +214,7 @@
             earlyCareer: {
                 title: "Early Career (2009-2011)",
                 icon: "book-open",
-                color: "#e6f6ff",  // Adjusted for better contrast
+                color: "#e6f6ff",
                 details: [
                     {
                         title: "Sales Consultant",
@@ -183,7 +240,7 @@
             shiftingPaths: {
                 title: "Shifting Paths (2011-2018)",
                 icon: "briefcase",
-                color: "#e6ffe6",  // Adjusted for better contrast
+                color: "#e6ffe6",
                 details: [
                     {
                         title: "FP&A Analyst to Finance Manager",
@@ -201,7 +258,7 @@
             currentPathway: {
                 title: "Current Pathway (2018-Present)",
                 icon: "trending-up",
-                color: "#f3e6ff",  // Adjusted for better contrast
+                color: "#f3e6ff",
                 details: [
                     {
                         title: "DTS Business Operations Controller",
@@ -220,7 +277,7 @@
                         highlights: [
                             "Implemented global automated RTB governance",
                             "2x Revenue growth in 3 years",
-                            "Become the most profitable Line of Business"
+                            "Most profitable Line of Business transformation"
                         ]
                     },
                     {
@@ -238,7 +295,7 @@
             skills: {
                 title: "Key Skills",
                 icon: "code",
-                color: "#fff2e6",  // Adjusted for better contrast
+                color: "#fff2e6",
                 details: [
                     {
                         title: "Technical Skills",
@@ -266,7 +323,8 @@
             extracurriculars: {
                 title: "Extra-curriculars",
                 icon: "users",
-                color: "#ffe6e6",  // Adjusted for better contrast
+                color: "#ffe6e6",
+                centered: true,
                 details: [
                     {
                         title: "Leadership & Mentoring",
@@ -289,11 +347,42 @@
                         ]
                     }
                 ]
+            },
+            careerGoals: {
+                title: "Career Goals",
+                icon: "target",
+                color: "#e6f9ff",
+                centered: true,
+                details: [
+                    {
+                        title: "Short Term Goals",
+                        highlights: [
+                            "Successfully Graduate FAP program",
+                            "Create a strong relationship with my New Mentor",
+                            "Being promoted in a role where I can Lead a team/organization and drive Transformation",
+                            "Lead meaningful AI/Digital events inside/outside the company"
+                        ]
+                    },
+                    {
+                        title: "Medium Term Goals",
+                        highlights: [
+                            "Scale business agility cross org - helping to build the finance of the future"
+                        ]
+                    },
+                    {
+                        title: "Long Term Goals",
+                        highlights: [
+                            "Lead a large organization - servant leader & a client first approach"
+                        ]
+                    }
+                ]
             }
         };
 
         function renderSections() {
-            const sectionsContainer = document.getElementById('sections');
+            const mainSectionsContainer = document.getElementById('main-sections');
+            const centeredSectionsContainer = document.getElementById('centered-sections');
+            
             Object.entries(data).forEach(([key, section]) => {
                 const card = document.createElement('div');
                 card.className = 'section-card';
@@ -303,7 +392,12 @@
                     <h2>${section.title}</h2>
                 `;
                 card.addEventListener('click', () => showDetails(key));
-                sectionsContainer.appendChild(card);
+                
+                if (section.centered) {
+                    centeredSectionsContainer.appendChild(card);
+                } else {
+                    mainSectionsContainer.appendChild(card);
+                }
             });
             feather.replace();
         }
